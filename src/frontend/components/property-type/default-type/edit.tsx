@@ -12,8 +12,18 @@ type CombinedProps = EditPropertyProps
 
 const Edit: FC<CombinedProps> = (props) => {
   const { property, record } = props
-  const error = record.errors?.[property.path]
+  const propsError = record.errors?.[property.path]
   const { tm } = useTranslation()
+  const [error, setError] = useState(propsError)
+  const propValue = record.params?.[property.path] ?? property.props.value ?? ''
+
+  useEffect(() => {
+    setError(propsError)
+  }, [propsError])
+
+  useEffect(() => {
+    setError({ message: property.isValid(propValue) })
+  }, [propValue])
 
   return (
     <FormGroup error={Boolean(error)}>
@@ -35,7 +45,9 @@ const SelectEdit: FC<CombinedProps> = (props) => {
   // eslint-disable-next-line max-len
   const availableValues = property.availableValues.map((v) => ({
     ...v,
-    label: tl(`${property.path}.${v.value}`, property.resourceId, { defaultValue: v.label ?? v.value }),
+    label: tl(`${property.path}.${v.value}`, property.resourceId, {
+      defaultValue: v.label ?? v.value,
+    }),
   }))
   // eslint-disable-next-line eqeqeq
   const selected = availableValues.find((av) => av.value == propValue)
@@ -67,7 +79,10 @@ const TextEdit: FC<CombinedProps> = (props) => {
       id={property.path}
       name={property.path}
       required={property.isRequired}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => {
+        setValue(e.target.value)
+        onChange(property.path, value)
+      }}
       onBlur={() => onChange(property.path, value)}
       // handle clicking ENTER
       onKeyDown={(e) => e.keyCode === 13 && onChange(property.path, value)}

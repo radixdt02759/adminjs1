@@ -1,6 +1,6 @@
 import { PropertyType } from '../../../backend/adapters/property/base-property.js'
 
-export type PropertyPlace = 'show' | 'list' | 'edit' | 'filter';
+export type PropertyPlace = 'show' | 'list' | 'edit' | 'filter'
 
 /**
  * JSON representation of a Property.
@@ -10,41 +10,41 @@ export interface PropertyJSON {
   /**
    * If given property should be treated as a title
    */
-  isTitle: boolean;
+  isTitle: boolean
   /**
    * If given property should be treated as a Id field
    */
-  isId: boolean;
+  isId: boolean
   /**
    * Property position on a list
    */
-  position: number;
+  position: number
   /**
    * If property is sortable
    */
-  isSortable: boolean;
+  isSortable: boolean
   /**
    * If property has restricted number of values
    */
-  availableValues: Array<{label?: string; value: string | number}> | null;
+  availableValues: Array<{ label?: string; value: string | number }> | null
   /**
    * Property uniq name
    */
-  name: string;
+  name: string
   /**
    * Property uniq path. For top level properties - the same as name, but for nested
    * properties it is separated with dot notation: `nested.property`
    */
-  propertyPath: string;
+  propertyPath: string
   /**
    * Path of the actual value inside the record. It is usually the same as propertyPath, with the
    * exception of array values.
    */
-  path: string;
+  path: string
   /**
    * Property label
    */
-  label: string;
+  label: string
   /**
    * Description of field. Shown as hoverable hint after label.
    *
@@ -78,79 +78,81 @@ export interface PropertyJSON {
    * });
    * ```
    */
-  description?: string;
+  description?: string
   /**
    * One of {@link PropertyType}s
    */
-  type: PropertyType;
+  type: PropertyType
   /**
    * Has a name of a resource to which it is a reference.
    * For instance property `userId` will have here `Users`
    */
-  reference: string | null;
+  reference: string | null
   /**
    * Indicates if property is an array of properties
    */
-  isArray: boolean;
+  isArray: boolean
   /**
    * Indicates if array elements should be draggable when editing.
    * It is only usable if the property is an array.
    */
-  isDraggable: boolean;
+  isDraggable: boolean
   /**
    * Contain list of all sub properties.
    * This is the case for nested schemas in MongoDB.
    */
-  subProperties: Array<BasePropertyJSON>;
+  subProperties: Array<BasePropertyJSON>
   /**
    * All component names overridden by the user in PropertyOptions
    */
   components?: {
-    show?: string;
-    edit?: string;
-    filter?: string;
-    list?: string;
-  };
+    show?: string
+    edit?: string
+    filter?: string
+    list?: string
+  }
 
   /**
    * Custom parameters passed from the {@link PropertyOptions.custom}.
    */
   custom: {
-    [key: string]: any;
-  };
+    [key: string]: any
+  }
 
   /**
    * Additional props passed to the actual react component
    */
   props: {
-    [key: string]: any;
-  };
+    [key: string]: any
+  }
 
   /**
    * Whether the field should be disabled in edition
    */
-  isDisabled: boolean;
+  isDisabled: boolean
 
   /**
    * Whether the field should be marked as required (with a star)
    */
-  isRequired: boolean;
+  isRequired: boolean
 
   /**
    * if label above the input should be hidden
    */
-  hideLabel: boolean;
+  hideLabel: boolean
 
   /**
    * Resource to which given property belongs
    */
-  resourceId: string;
+  resourceId: string
 
   /**
    * Indicates if given property has been created in AdminJS {@link PropertyOptions} and hasn't
    * been returned by the database adapter.
    */
-  isVirtual: boolean;
+  isVirtual: boolean
+
+  isValid: (value: string | null | undefined) => string
 }
 
 export type BasePropertyJSON = Omit<PropertyJSON, 'path'>

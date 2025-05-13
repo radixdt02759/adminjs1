@@ -52,13 +52,20 @@ export class PropertyDecorator {
    * @param {PropertyOptions}     opts.options
    * @param {ResourceDecorator}   opts.resource
    */
-  constructor({ property, admin, options = {}, resource, path, isVirtual }: {
-    property: BaseProperty;
-    admin: AdminJS;
-    options?: PropertyOptions;
-    resource: ResourceDecorator;
-    path?: string;
-    isVirtual?: boolean;
+  constructor({
+    property,
+    admin,
+    options = {},
+    resource,
+    path,
+    isVirtual,
+  }: {
+    property: BaseProperty
+    admin: AdminJS
+    options?: PropertyOptions
+    resource: ResourceDecorator
+    path?: string
+    isVirtual?: boolean
   }) {
     this.property = property
     this._admin = admin
@@ -70,7 +77,7 @@ export class PropertyDecorator {
     /**
      * Options passed along with a given resource
      * @type {PropertyOptions}
-    */
+     */
     this.options = options
   }
 
@@ -196,8 +203,12 @@ export class PropertyDecorator {
     if (this.options.position) {
       return this.options.position
     }
-    if (this.isTitle()) { return -1 }
-    if (this.isId()) { return 0 }
+    if (this.isTitle()) {
+      return -1
+    }
+    if (this.isId()) {
+      return 0
+    }
     return 100 + this.property.position()
   }
 
@@ -247,6 +258,7 @@ export class PropertyDecorator {
    * @return {PropertyJSON}
    */
   toJSON(where?: PropertyPlace): BasePropertyJSON {
+    console.log('tojson logged')
     return {
       isTitle: this.isTitle(),
       isId: this.isId(),
@@ -254,6 +266,7 @@ export class PropertyDecorator {
       custom: typeof this.options.custom === 'undefined' ? {} : this.options.custom,
       isSortable: this.isSortable(),
       isRequired: this.isRequired(),
+      isValid: (field) => field || 'tojson',
       availableValues: this.availableValues(),
       name: this.name(),
       propertyPath: this.propertyPath,
@@ -271,8 +284,7 @@ export class PropertyDecorator {
       resourceId: this._resource.id(),
       isVirtual: this.isVirtual,
       props: this.options.props || {},
-      description: this.options.description
-        ? this.options.description : undefined,
+      description: this.options.description ? this.options.description : undefined,
     }
   }
 
@@ -283,6 +295,7 @@ export class PropertyDecorator {
    */
   subProperties(): Array<PropertyDecorator> {
     const dbSubProperties = this.property.subProperties().map((subProperty) => {
+      console.log('subProperty', subProperty)
       const path = `${this.propertyPath}.${subProperty.name()}`
       const decorated = new PropertyDecorator({
         property: subProperty,
